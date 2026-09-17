@@ -1,0 +1,10 @@
+**/storage/*
+**/vault/*
+**/uploads/*
+**/node_modules/*
+**/backups/*
+**/logs/*
+package-lock.json
+crochi.db
+test.js
+.env
