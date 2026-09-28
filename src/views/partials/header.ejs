@@ -1,0 +1,49 @@
+<header id="header" class="header position-relative">
+	<!-- Header Bar -->
+	<div class="header-bar">
+		<div class="container-fluid container-xl">
+			<div class="d-flex align-items-center justify-content-between">
+				<!-- Logo -->
+				<a href="/" class="logo d-flex align-items-center">
+					<h1 class="sitename">Crochi Perú</h1>
+				</a>
+
+				<div class="header-actions d-flex align-items-center">
+					<!-- Cuenta -->
+					<div class="dropdown account-dropdown">
+						<button class="action-icon" data-bs-toggle="dropdown" aria-label="Account">
+							<i class="bi bi-person"></i>
+							<span class="action-label d-none d-md-inline">Ingresar</span>
+						</button>
+						<div class="dropdown-menu account-panel">
+							<div class="account-panel-header">
+								<h6>¡Hola!</h6>
+								<p>Inicia sesión para continuar</p>
+							</div>
+							<div class="account-panel-auth">
+								<a href="#" class="btn btn-signin">Ingresar</a>
+							</div>
+						</div>
+					</div>
+					<!-- Menú de Navegación -->
+					<i class="mobile-nav-toggle d-xl-none bi bi-list me-0"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+	<% if (navbar=='admin' ) { %>
+		<!-- Navigation -->
+		<div class="header-nav">
+			<div class="container-fluid container-xl position-relative">
+				<nav id="navmenu" class="navmenu">
+					<ul>
+						<li><a href="#">Productos</a></li>
+						<li><a href="#">Clientes</a></li>
+						<li><a href="#">Pedidos</a></li>
+						<li><a href="#">SUNAT</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<% } %>
+</header>

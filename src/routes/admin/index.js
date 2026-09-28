@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', async function (req, res) {
-    return res.render('error', { });
+	return res.render('admin/inicio', { });
 });
 
 module.exports = router;
