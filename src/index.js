@@ -29,6 +29,7 @@ app.use(async function (req, res, next) {
 });
 
 app.use('/admin', require('./routes/admin'));
+app.use('/admin/productos', require('./routes/admin/productos'));
 
 app.get('/{*splat}', async function (req, res) {
 	return res.redirect('/admin');

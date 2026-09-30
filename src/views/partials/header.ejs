@@ -31,16 +31,16 @@
 			</div>
 		</div>
 	</div>
-	<% if (navbar=='admin' ) { %>
+	<% if (navbar=='admin') { %>
 		<!-- Navigation -->
 		<div class="header-nav">
 			<div class="container-fluid container-xl position-relative">
-				<nav id="navmenu" class="navmenu">
+				<nav id="navmenu" class="navmenu mx-auto">
 					<ul>
-						<li><a href="#">Productos</a></li>
-						<li><a href="#">Clientes</a></li>
-						<li><a href="#">Pedidos</a></li>
-						<li><a href="#">SUNAT</a></li>
+						<li><a href="/admin/productos" class="<%- item == 'productos' ? 'active' : '' %>">Productos</a></li>
+						<li><a href="#" class="<%- item == 'clientes' ? 'active' : '' %>">Clientes</a></li>
+						<li><a href="#" class="<%- item == 'pedidos' ? 'active' : '' %>">Pedidos</a></li>
+						<li><a href="#" class="<%- item == 'sunat' ? 'active' : '' %>">SUNAT</a></li>
 					</ul>
 				</nav>
 			</div>

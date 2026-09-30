@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Crochi Perú - Admin</title>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+    <%- include('../partials/header', { navbar: 'admin' , item: 'productos' }) %>
+
+    <main class="main container">
+        <nav class="my-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+                <li class="breadcrumb-item active">Productos</li>
+            </ol>
+        </nav>
+		<div class="my-3 text-end">
+			<a href="/admin/productos/registrar" class="btn btn-primary">
+				<i class="bi bi-plus-circle"></i> Registrar producto
+			</a>
+		</div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% var n = 1 %>
+                    <% for (var producto of productos) { %>
+                    <tr>
+                        <th scope="row"><%- n++ %></th>
+                        <td><%- producto.Nombre %></td>
+                        <td>S/ <%- producto.Precio.toFixed(2) %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+                <caption>
+                    Se encontró <%- productos.length %> producto(s)
+                </caption>
+            </table>
+        </div>
+    </main>
+
+    <%- include('../partials/script') %>
+</body>
+
+</html>

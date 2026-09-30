@@ -26,7 +26,7 @@ function Query(query, params = {}) {
 		db.all(query, params, (error, rows) => {
 			if (error) {
 				console.log('DB Error:', error.message);
-				return resolve(false);
+				return resolve({ error: error.message });
 			}
 			resolve(rows);
 		});
@@ -86,6 +86,35 @@ Storage.Backup = async function () {
 	}
 };
 setInterval(Storage.Backup, 60 * 60 * 1000) // Una hora
+
+
+
+Storage.Productos = function () { }
+Storage.Productos.prototype = {}
+
+
+Storage.Productos.Crear = async function (nombre, precio) {
+	return await Query('INSERT INTO Productos (Nombre, Precio) VALUES (?, ?) RETURNING *', [nombre, precio]);
+}
+Storage.Productos.Leer = async function () {
+    return await Query('SELECT * FROM Productos WHERE IsDeleted = 0 ORDER BY Nombre');
+}
+Storage.Productos.LeerTodo = async function () {
+    return await Query('SELECT * FROM Productos ORDER BY Nombre');
+}
+Storage.Productos.LeerProductoId = async function (id) {
+    return await Query('SELECT * FROM Productos WHERE ProductoId = ? AND IsDeleted = 0', [id]);
+}
+Storage.Productos.Actualizar = async function (id, nombre, precio) {
+    return await Query('UPDATE Productos SET Nombre = ?, Precio = ?, UpdatedAt = (unixepoch() * 1000) WHERE ProductoId = ? RETURNING *', [nombre, precio, id]);
+};
+Storage.Productos.Eliminar = async function (id) {
+    return await Query('UPDATE Productos SET IsDeleted = 1 WHERE ProductoId = ? RETURNING *', [id]);
+};
+
+
+
+
 
 
 
