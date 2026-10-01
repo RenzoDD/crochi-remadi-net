@@ -92,7 +92,6 @@ setInterval(Storage.Backup, 60 * 60 * 1000) // Una hora
 Storage.Productos = function () { }
 Storage.Productos.prototype = {}
 
-
 Storage.Productos.Crear = async function (nombre, precio) {
 	return await Query('INSERT INTO Productos (Nombre, Precio) VALUES (?, ?) RETURNING *', [nombre, precio]);
 }
@@ -114,7 +113,39 @@ Storage.Productos.Eliminar = async function (id) {
 
 
 
+Storage.Clientes = function () { }
+Storage.Clientes.prototype = {}
 
+Storage.Clientes.Crear = async function (nombre, whatsapp, celular) {
+	var result = await Query('SELECT * FROM Clientes WHERE upper(Nombre) = upper(?) AND IsDeleted = 0', [nombre]);
+	if (result.error) return result;
+
+	if (result.length > 0)
+		return { error: 'Ya existe un cliente con este nombre' };
+
+	return await Query('INSERT INTO Clientes (Nombre, WhatsApp, Celular) VALUES (?, ?, ?) RETURNING *', [nombre, whatsapp, celular]);
+}
+Storage.Clientes.Leer = async function () {
+    return await Query('SELECT * FROM Clientes WHERE IsDeleted = 0 ORDER BY Nombre');
+}
+Storage.Clientes.LeerTodo = async function () {
+    return await Query('SELECT * FROM Clientes ORDER BY Nombre');
+}
+Storage.Clientes.LeerClienteId = async function (id) {
+    return await Query('SELECT * FROM Clientes WHERE ClienteId = ? AND IsDeleted = 0', [id]);
+}
+Storage.Clientes.Actualizar = async function (id, nombre, whatsapp, celular) {
+	var result = await Query('SELECT * FROM Clientes WHERE upper(Nombre) = upper(?) AND IsDeleted = 0', [nombre]);
+	if (result.error) return result;
+
+	if (result.length > 0 && result[0].ClienteId != id)
+		return { error: 'Ya existe un cliente con este nombre' };
+
+    return await Query('UPDATE Clientes SET Nombre = ?, WhatsApp = ?, Celular = ?, UpdatedAt = (unixepoch() * 1000) WHERE ClienteId = ? RETURNING *', [nombre, whatsapp, celular, id]);
+};
+Storage.Clientes.Eliminar = async function (id) {
+    return await Query('UPDATE Clientes SET IsDeleted = 1 WHERE ClienteId = ? RETURNING *', [id]);
+};
 
 
 

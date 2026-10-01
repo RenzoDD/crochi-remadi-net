@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Crochi Perú - Admin</title>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+    <%- include('../partials/header', { navbar: 'admin' , item: 'clientes' }) %>
+
+    <main class="main container">
+        <nav class="my-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+                <li class="breadcrumb-item"><a href="/admin/clientes">Clientes</a></li>
+                <li class="breadcrumb-item active">Registrar</li>
+            </ol>
+        </nav>
+        <form action="/admin/clientes/registrar" method="post">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <label for="nombre" class="fw-bold">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control form-control-lg" required>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="whatsapp" class="fw-bold">WhatsApp</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text">@</span>
+                        <input type="text" id="whatsapp" name="whatsapp" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="celular" class="fw-bold">Celular</label>
+                    <input type="text" id="celular" name="celular" class="form-control form-control-lg">
+                </div>
+                <div class="col-12">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <button class="btn btn-primary">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <%- include('../partials/script') %>
+</body>
+
+</html>
