@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Crochi Perú - Admin</title>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+    <%- include('../partials/header', { navbar: 'admin' , item: 'pedidos' }) %>
+
+    <main class="main container">
+        <nav class="my-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+                <li class="breadcrumb-item active">Pedidos</li>
+            </ol>
+        </nav>
+		<div class="my-3 text-end">
+			<a href="/admin/pedidos/registrar" class="btn btn-primary">
+				<i class="bi bi-plus-circle"></i> Registrar pedido
+			</a>
+		</div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% var n = 1 %>
+                    <% for (var pedido of pedidos) { %>
+                    <tr>
+                        <% var cliente = clientes.find(x => x.ClienteId == pedido.ClienteId) %>
+                        <th scope="row"><%- n++ %></th>
+                        <td class="fw-bold"><%- pedido.Codigo %></td>
+                        <td><%- cliente ? cliente.Nombre : '' %></td>
+                        <td><%- pedido.FechaEntrega %></td>
+                        <td><%- pedido.Estado %></td>
+                        <td>S/ <%- pedido.MontoTotal.toFixed(2) %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+                <caption>
+                    Se encontró <%- pedidos.length %> pedido(s)
+                </caption>
+            </table>
+        </div>
+    </main>
+
+    <%- include('../partials/script') %>
+</body>
+
+</html>

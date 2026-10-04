@@ -50,4 +50,32 @@ Util.LimpiarDecimal = function (value) {
 	return Math.round((decimal + Number.EPSILON) * 100) / 100;
 };
 
+Util.LimpiarInteger = function (value) {
+	if (value === null || value === undefined) return null;
+
+	if (typeof value === 'number') {
+		if (!Number.isSafeInteger(value)) return null;
+		return value;
+	}
+
+	if (typeof value !== 'string') {
+		return null;
+	}
+
+	value = value.trim();
+
+	if (value === '') return null;
+
+	// Solo enteros normales: -123, 0, 123
+	if (!/^-?\d+$/.test(value)) {
+		return null;
+	}
+
+	const integer = Number(value);
+
+	if (!Number.isSafeInteger(integer)) return null;
+
+	return integer;
+};
+
 module.exports = Util;

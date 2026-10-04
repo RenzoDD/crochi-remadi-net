@@ -31,6 +31,7 @@ app.use(async function (req, res, next) {
 app.use('/admin', require('./routes/admin'));
 app.use('/admin/productos', require('./routes/admin/productos'));
 app.use('/admin/clientes', require('./routes/admin/clientes'));
+app.use('/admin/pedidos', require('./routes/admin/pedidos'));
 
 app.get('/{*splat}', async function (req, res) {
 	return res.redirect('/admin');

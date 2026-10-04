@@ -149,4 +149,44 @@ Storage.Clientes.Eliminar = async function (id) {
 
 
 
+Storage.Pedidos = function () { }
+Storage.Pedidos.prototype = {}
+
+Storage.Pedidos.Crear = async function (cliente, fecha, adelanto, total, comentario) {
+    var periodo = new Date(fecha).getFullYear() + '%';
+    var result = await Query('SELECT COUNT(*) AS Cantidad FROM Pedidos WHERE Codigo LIKE ?', [periodo]);
+	if (result.error) return result;
+	var codigo = new Date().getFullYear() + '-' + (result[0].Cantidad + 1).toString().padStart(5, '0');
+
+	return await Query('INSERT INTO Pedidos (Codigo, ClienteId, FechaEntrega, MontoAdelanto, MontoTotal, Comentario) VALUES (?, ?, ?, ?, ?, ?) RETURNING *', [codigo, cliente, fecha, adelanto, total, comentario]);
+}
+Storage.Pedidos.Leer = async function () {
+	return await Query('SELECT * FROM Pedidos WHERE IsDeleted = 0 ORDER BY Codigo DESC');
+}
+Storage.Pedidos.LeerTodo = async function () {
+	return await Query('SELECT * FROM Pedidos ORDER BY Codigo DESC');
+}
+Storage.Pedidos.LeerPedidoId = async function (id) {
+	return await Query('SELECT * FROM Pedidos WHERE PedidoId = ? AND IsDeleted = 0', [id]);
+}
+Storage.Pedidos.Actualizar = async function (id, cliente, fecha, adelanto, total, comentario) {
+	return await Query('UPDATE Pedidos SET ClienteId = ?, FechaEntrega = ?, MontoAdelanto = ?, MontoTotal = ?, Comentario = ?, UpdatedAt = (unixepoch() * 1000) WHERE PedidoId = ? RETURNING *', [cliente, fecha, adelanto, total, comentario, id]);
+}
+Storage.Pedidos.Eliminar = async function (id) {
+	return await Query('UPDATE Pedidos SET IsDeleted = 1 WHERE PedidoId = ? RETURNING *', [id]);
+}
+
+
+
+Storage.PedidosDetalles = function () { }
+Storage.PedidosDetalles.prototype = {}
+
+Storage.PedidosDetalles.Crear = async function (pedido, producto, cantidad, precio) {
+	return await Query('INSERT INTO PedidosDetalles (PedidoId, ProductoId, Cantidad, PrecioUnitario) VALUES (?, ?, ?, ?) RETURNING *', [pedido, producto, cantidad, precio]);
+}
+
+
+
+
+
 module.exports = Storage;

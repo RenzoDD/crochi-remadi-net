@@ -13826,3 +13826,9 @@ h1, h2, h3, h4, h5, h6 {
 body {
   font-family: "Comfortaa" !important;
 }
+
+.disabled-normal[disabled] {
+  background-color: #fff !important;
+  opacity: 1;
+  color: #212529; /* Bootstrap's default text color for inputs */
+}

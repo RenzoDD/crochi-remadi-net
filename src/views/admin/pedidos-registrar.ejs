@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Crochi Perú - Admin</title>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+    <%- include('../partials/header', { navbar: 'admin' , item: 'pedidos' }) %>
+
+    <main class="main container">
+        <nav class="my-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+                <li class="breadcrumb-item"><a href="/admin/pedidos">Pedidos</a></li>
+                <li class="breadcrumb-item active">Registrar</li>
+            </ol>
+        </nav>
+        <form action="/admin/pedidos/registrar" method="post">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="fw-bold">Cliente</label>
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" id="cliente-input" list="clientes" oninput="SeleccionarCliente()" autocomplete="off">
+                        <input type="hidden" class="form-control" id="cliente" name="cliente" required>
+                        <datalist id="clientes">
+                            <% for (var cliente of clientes) { %>
+                            <option id="cliente-<%- cliente.ClienteId %>" value="<%- cliente.Nombre %>">
+                                <% } %>
+                        </datalist>
+                        <script>
+                            function SeleccionarCliente() {
+                                var input = document.getElementById("cliente-input");
+                                var cliente = document.getElementById("cliente");
+                                var icono = document.getElementById("cliente-result");
+
+                                cliente.value = "";
+                                input.setCustomValidity('Cliente Inválido');
+                                icono.innerHTML = '<i class="bi bi-exclamation-octagon"></i>';
+
+                                const valor = input.value.trim().toUpperCase();
+                                const opciones = document.querySelectorAll("#clientes option");
+
+                                opciones.forEach(opt => {
+                                    if (opt.value.toUpperCase() === valor) {
+                                        cliente.value = opt.id.replace("cliente-", "");
+                                        input.setCustomValidity('');
+                                        icono.innerHTML = '<i class="bi bi-check-circle"></i>';
+                                    }
+                                });
+                            }
+                            document.addEventListener('DOMContentLoaded', SeleccionarCliente);
+                            window.addEventListener("pageshow", SeleccionarCliente);
+                        </script>
+                        <span class="input-group-text" id="cliente-result"><i class="bi bi-exclamation-octagon"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="fecha" class="fw-bold">Fecha Entrega</label>
+                    <input type="date" id="fecha" name="fecha" class="form-control form-control-lg" required>
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="mb-3">
+                        <label for="productos" class="fw-bold">Productos</label>
+                        <div class="input-group input-group-lg">
+                            <select id="producto" class="form-select">
+                                <option selected disabled></option>
+                                <% for (var producto of productos) { %>
+                                <option value="<%- producto.ProductoId %>" precio="<%- producto.Precio %>"><%- producto.Nombre %></option>
+                                <% } %>
+                            </select>
+                            <button type="button" class="btn btn-primary" onclick="AgregarProducto()">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover  mb-0">
+                            <thead class="align-middle">
+                                <tr>
+                                    <th scope="col">Producto</th>
+                                    <th scope="col" style="width: 100px; min-width: 100px; max-width: 100px;">Cant.</th>
+                                    <th scope="col" style="width: 120px; min-width: 120px; max-width: 120px;">P. Unit.</th>
+                                    <th scope="col" style="width: 75px; min-width: 75px; max-width: 75px;">Subtotal</th>
+                                    <th scope="col" style="width: 75px; min-width: 75px; max-width: 75px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle" id="lista-productos" style="white-space: nowrap">
+
+                            </tbody>
+                            <caption id="caption">
+                                No se han agregado productos
+                            </caption>
+                            <script>
+                                let n = 0;
+                                function AgregarProducto() {
+                                    var producto = document.getElementById('producto');
+                                    if (!producto.value) return;
+
+                                    var option = producto.options[producto.selectedIndex];
+                                    var id = producto.value;
+                                    var precio = option.getAttribute('precio');
+                                    var nombre = option.text;
+
+                                    producto.value = "";
+
+                                    const template = document.createElement('template');
+                                    template.innerHTML = `
+                                        <tr id="detalle-${n}">
+                                            <td>
+                                                <input type="hidden" name="detalle-producto-${n}" value="${id}" required>
+                                                ${nombre}
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm  text-center" min="1" step="1" id="detalle-cantidad-${n}" name="detalle-cantidad-${n}" value="1" oninput="CalcularTotales()" required>
+                                            </td>
+                                            <td>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">S/</span>
+                                                    <input type="number" class="form-control text-center" min="0" step="0.01" id="detalle-precio-${n}" name="detalle-precio-${n}" value="${precio}" oninput="CalcularTotales()" required>
+                                                </div>
+                                            </td>
+                                            <td id="detalle-subtotal-${n}">
+                                                S/ -
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm" onclick="EliminarProducto(${n})">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        `.trim();
+                                    n++;
+                                    var lista = document.getElementById('lista-productos');
+                                    lista.appendChild(template.content.firstChild);
+
+                                    if (lista.children.length == 0)
+                                        document.getElementById('caption').innerHTML = 'No se han agregado items';
+                                    else
+                                        document.getElementById('caption').innerHTML = `Se ha registrado ${lista.children.length} item(s)`;
+
+                                    CalcularTotales();
+                                }
+                                function EliminarProducto(id) {
+                                    document.getElementById('detalle-' + id).remove();
+
+                                    var lista = document.getElementById('lista-productos');
+                                    if (lista.children.length == 0) {
+                                        document.getElementById('caption').innerHTML = 'No se han agregado items';
+                                    }
+                                    else
+                                        document.getElementById('caption').innerHTML = `Se ha registrado ${lista.children.length} item(s)`;
+
+                                    CalcularTotales();
+                                }
+                                function CalcularTotales() {
+                                    var lista = document.getElementById('lista-productos');
+                                    if (lista.children.length == 0)
+                                        document.getElementById('producto').setCustomValidity('Debe agregar al menos un producto');
+                                    else
+                                        document.getElementById('producto').setCustomValidity('');
+
+                                    var total = 0;
+                                    for (var i = 0; i < n; i++) {
+                                        var cantidad = document.getElementById('detalle-cantidad-' + i);
+                                        var precio = document.getElementById('detalle-precio-' + i);
+
+                                        if (!cantidad || !precio) continue;
+
+                                        var cantidad = parseInt(cantidad.value);
+                                        var precio = parseFloat(precio.value);
+
+                                        if (isNaN(cantidad) || isNaN(precio)) {
+                                            document.getElementById('detalle-subtotal-' + i).innerHTML = 'S/ -';
+                                            continue;
+                                        }
+
+                                        var subtotal = (cantidad * precio).toFixed(2);
+                                        if (precio == 0)
+                                            document.getElementById('detalle-subtotal-' + i).innerHTML = `<span class="badge rounded-pill bg-primary">Cortesía</span>`
+                                        else
+                                            document.getElementById('detalle-subtotal-' + i).innerHTML = 'S/ ' + subtotal;
+
+                                        total += parseFloat(subtotal);
+                                    }
+
+                                    document.getElementById('total').value = total.toFixed(2);
+
+                                    var adelanto = document.getElementById('adelanto').value || 0;
+                                    if (adelanto > total)
+                                        document.getElementById('adelanto').setCustomValidity('El adelanto no puede ser mayor que el total');
+                                    else
+                                        document.getElementById('adelanto').setCustomValidity('');
+                                }
+
+                                document.addEventListener('DOMContentLoaded', CalcularTotales);
+                            </script>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="adelanto" class="fw-bold">Adelanto</label>
+                    <input type="number" id="adelanto" name="adelanto" class="form-control form-control-lg">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="total" class="fw-bold">Total</label>
+                    <input type="number" id="total" class="form-control form-control-lg disabled-normal" disabled>
+                </div>
+                <div class="col-12 mb-4">
+                    <label for="comentario" class="fw-bold">Comentario</label>
+                    <textarea id="comentario" name="comentario" class="form-control form-control-lg"></textarea>
+                </div>
+                <div class="col-12">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <button class="btn btn-primary">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <%- include('../partials/script') %>
+</body>
+
+</html>

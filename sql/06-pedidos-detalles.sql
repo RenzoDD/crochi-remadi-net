@@ -5,7 +5,7 @@ CREATE TABLE PedidosDetalles (
 	ProductoId integer NOT NULL,
 	Cantidad integer NOT NULL,
 	PrecioUnitario decimal(8,2) NOT NULL,
-	EstadoId integer NOT NULL,
+	EstadoId integer NOT NULL DEFAULT 1,
 
 	CreatedAt integer NOT NULL DEFAULT (unixepoch() * 1000),
 	UpdatedAt integer NOT NULL DEFAULT (unixepoch() * 1000),
