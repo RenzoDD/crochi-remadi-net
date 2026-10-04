@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Crochi Perú - Admin</title>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+    <%- include('../partials/header', { navbar: 'admin' , item: 'pedidos' }) %>
+
+    <main class="main container">
+        <nav class="my-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+                <li class="breadcrumb-item"><a href="/admin/pedidos">Pedidos</a></li>
+                <li class="breadcrumb-item active"><%- pedido.Codigo %></li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label class="fw-bold">Cliente</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input type="text" value="<%- cliente.Nombre %>" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <label for="fecha" class="fw-bold">Fecha Entrega</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                    <input type="text" value="<%- pedido.FechaEntrega %>" class="form-control" readonly>
+                </div>
+            </div>
+            
+                        <div class="col-12 mb-3">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="align-middle">
+                                        <tr>
+                                            <th scope="col">Producto</th>
+                                            <th></th>
+                                            <th scope="col" class="text-center" style="width: 100px; min-width: 100px; max-width: 100px;">Cantidad</th>
+                                            <th scope="col" class="text-center" style="width: 100px; min-width: 100px; max-width: 100px;">P. Unit.</th>
+                                            <th scope="col" class="text-center" style="width: 100px; min-width: 100px; max-width: 100px;">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="align-middle" style="white-space: nowrap">
+                                        <% for (var detalle of detalles) { %>
+                                        <tr>
+                                            <% var producto = productos.find(x => x.ProductoId == detalle.ProductoId) %>
+                                            <% var estado = estados.find(x => x.EstadoId == detalle.EstadoId) %>
+                                            <td>
+                                                <%- producto.Nombre %>
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="badge rounded-pill bg-<%- estado.Color %>">
+                                                    <%- estado.Nombre %>
+                                                </span>
+                                            </td>
+                                            <td class="text-center"><%- detalle.Cantidad %></td>
+                                            <td class="text-end">S/ <%- detalle.PrecioUnitario.toFixed(2) %></td>
+                                            <td class="text-end">S/ <%- (detalle.Cantidad * detalle.PrecioUnitario).toFixed(2) %></td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                    <caption id="caption">
+                                        Se ha registrado <%- detalles.length %> item(s)
+                                    </caption>
+                                </table>
+                            </div>
+                        </div>
+            <div class="col-md-6 mb-4">
+                <label for="adelanto" class="fw-bold">Adelanto</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text">S/</span>
+                    <input type="number" value="<%- pedido.MontoAdelanto.toFixed(2) %>" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <label for="total" class="fw-bold">Total</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text">S/</span>
+                    <input type="number" id="total" value="<%- pedido.MontoTotal.toFixed(2) %>" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="col-12 mb-4">
+                <label for="comentario" class="fw-bold">Comentario</label>
+                <textarea id="comentario" name="comentario" class="form-control form-control-lg" readonly><%- pedido.Comentario %></textarea>
+            </div>
+        </div>
+    </main>
+
+    <%- include('../partials/script') %>
+</body>
+
+</html>

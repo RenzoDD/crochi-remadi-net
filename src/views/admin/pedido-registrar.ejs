@@ -22,6 +22,7 @@
                 <div class="col-md-6 mb-4">
                     <label class="fw-bold">Cliente</label>
                     <div class="input-group input-group-lg">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
                         <input type="text" class="form-control" id="cliente-input" list="clientes" oninput="SeleccionarCliente()" autocomplete="off">
                         <input type="hidden" class="form-control" id="cliente" name="cliente" required>
                         <datalist id="clientes">
@@ -58,7 +59,10 @@
                 </div>
                 <div class="col-md-6 mb-4">
                     <label for="fecha" class="fw-bold">Fecha Entrega</label>
-                    <input type="date" id="fecha" name="fecha" class="form-control form-control-lg" required>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                        <input type="date" id="fecha" name="fecha" class="form-control" required>
+                    </div>
                 </div>
                 <div class="col-12 mb-4">
                     <div class="mb-3">
@@ -80,10 +84,10 @@
                             <thead class="align-middle">
                                 <tr>
                                     <th scope="col">Producto</th>
-                                    <th scope="col" style="width: 100px; min-width: 100px; max-width: 100px;">Cant.</th>
-                                    <th scope="col" style="width: 120px; min-width: 120px; max-width: 120px;">P. Unit.</th>
-                                    <th scope="col" style="width: 75px; min-width: 75px; max-width: 75px;">Subtotal</th>
-                                    <th scope="col" style="width: 75px; min-width: 75px; max-width: 75px;"></th>
+                                    <th scope="col" class="text-center" style="width: 100px; min-width: 100px; max-width: 100px;">Cant.</th>
+                                    <th scope="col" class="text-center" style="width: 120px; min-width: 120px; max-width: 120px;">P. Unit.</th>
+                                    <th scope="col" class="text-center" style="width: 75px; min-width: 75px; max-width: 75px;">Subtotal</th>
+                                    <th scope="col" class="text-center" style="width: 75px; min-width: 75px; max-width: 75px;"></th>
                                 </tr>
                             </thead>
                             <tbody class="align-middle" id="lista-productos" style="white-space: nowrap">
@@ -113,10 +117,10 @@
                                                 ${nombre}
                                             </td>
                                             <td>
-                                                <input type="number" class="form-control form-control-sm  text-center" min="1" step="1" id="detalle-cantidad-${n}" name="detalle-cantidad-${n}" value="1" oninput="CalcularTotales()" required>
+                                                <input type="number" class="form-control  text-center" min="1" step="1" id="detalle-cantidad-${n}" name="detalle-cantidad-${n}" value="1" oninput="CalcularTotales()" required>
                                             </td>
                                             <td>
-                                                <div class="input-group input-group-sm">
+                                                <div class="input-group">
                                                     <span class="input-group-text">S/</span>
                                                     <input type="number" class="form-control text-center" min="0" step="0.01" id="detalle-precio-${n}" name="detalle-precio-${n}" value="${precio}" oninput="CalcularTotales()" required>
                                                 </div>
@@ -201,11 +205,17 @@
                 </div>
                 <div class="col-md-6 mb-4">
                     <label for="adelanto" class="fw-bold">Adelanto</label>
-                    <input type="number" id="adelanto" name="adelanto" class="form-control form-control-lg">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text">S/</span>
+                        <input type="number" id="adelanto" name="adelanto" class="form-control" min="0" step="0.01">
+                    </div>
                 </div>
                 <div class="col-md-6 mb-4">
                     <label for="total" class="fw-bold">Total</label>
-                    <input type="number" id="total" class="form-control form-control-lg disabled-normal" disabled>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text">S/</span>
+                        <input type="number" id="total" class="form-control form-control-lg" readonly>
+                    </div>
                 </div>
                 <div class="col-12 mb-4">
                     <label for="comentario" class="fw-bold">Comentario</label>

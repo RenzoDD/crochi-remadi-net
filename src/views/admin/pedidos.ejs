@@ -36,13 +36,18 @@
                 <tbody>
                     <% var n = 1 %>
                     <% for (var pedido of pedidos) { %>
-                    <tr>
+                    <tr onclick="window.location='/admin/pedidos/<%- pedido.Codigo %>'" style="cursor: pointer;">
                         <% var cliente = clientes.find(x => x.ClienteId == pedido.ClienteId) %>
+                        <% var estado = estados.find(x => x.EstadoId == pedido.EstadoId) %>
                         <th scope="row"><%- n++ %></th>
                         <td class="fw-bold"><%- pedido.Codigo %></td>
                         <td><%- cliente ? cliente.Nombre : '' %></td>
                         <td><%- pedido.FechaEntrega %></td>
-                        <td><%- pedido.Estado %></td>
+                        <td>
+                            <span class="badge rounded-pill bg-<%- estado.Color %>">
+                                <%- estado.Nombre %>
+                            </span>
+                        </td>
                         <td>S/ <%- pedido.MontoTotal.toFixed(2) %></td>
                     </tr>
                     <% } %>

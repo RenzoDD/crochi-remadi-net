@@ -17,7 +17,7 @@ router.get('/', async function (req, res) {
 
 /****          /admin/productos/registrar          ****/
 router.get('/registrar', async function (req, res) {
-    return res.render('admin/productos-registrar', {  });
+    return res.render('admin/producto-registrar', {  });
 });
 router.post('/registrar', async function (req, res) {
     var nombre = Util.LimpiarTexto(req.body.nombre, 50);

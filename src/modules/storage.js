@@ -161,13 +161,25 @@ Storage.Pedidos.Crear = async function (cliente, fecha, adelanto, total, comenta
 	return await Query('INSERT INTO Pedidos (Codigo, ClienteId, FechaEntrega, MontoAdelanto, MontoTotal, Comentario) VALUES (?, ?, ?, ?, ?, ?) RETURNING *', [codigo, cliente, fecha, adelanto, total, comentario]);
 }
 Storage.Pedidos.Leer = async function () {
-	return await Query('SELECT * FROM Pedidos WHERE IsDeleted = 0 ORDER BY Codigo DESC');
+	var query = `SELECT P.*, MIN(PD.EstadoId) AS EstadoId
+				FROM
+						Pedidos P
+					LEFT JOIN
+						PedidosDetalles PD
+					ON P.PedidoId = PD.PedidoId AND PD.IsDeleted = 0
+				WHERE P.IsDeleted = 0
+				GROUP BY P.PedidoId
+				ORDER BY P.FechaEntrega DESC`;
+	return await Query(query);
 }
 Storage.Pedidos.LeerTodo = async function () {
 	return await Query('SELECT * FROM Pedidos ORDER BY Codigo DESC');
 }
 Storage.Pedidos.LeerPedidoId = async function (id) {
 	return await Query('SELECT * FROM Pedidos WHERE PedidoId = ? AND IsDeleted = 0', [id]);
+}
+Storage.Pedidos.LeerCodigo = async function (codigo) {
+	return await Query('SELECT * FROM Pedidos WHERE Codigo = ? AND IsDeleted = 0', [codigo]);
 }
 Storage.Pedidos.Actualizar = async function (id, cliente, fecha, adelanto, total, comentario) {
 	return await Query('UPDATE Pedidos SET ClienteId = ?, FechaEntrega = ?, MontoAdelanto = ?, MontoTotal = ?, Comentario = ?, UpdatedAt = (unixepoch() * 1000) WHERE PedidoId = ? RETURNING *', [cliente, fecha, adelanto, total, comentario, id]);
@@ -184,8 +196,18 @@ Storage.PedidosDetalles.prototype = {}
 Storage.PedidosDetalles.Crear = async function (pedido, producto, cantidad, precio) {
 	return await Query('INSERT INTO PedidosDetalles (PedidoId, ProductoId, Cantidad, PrecioUnitario) VALUES (?, ?, ?, ?) RETURNING *', [pedido, producto, cantidad, precio]);
 }
+Storage.PedidosDetalles.LeerPedidoId = async function (pedido) {
+	return await Query('SELECT * FROM PedidosDetalles WHERE PedidoId = ? AND IsDeleted = 0', [pedido]);
+}
 
 
+
+Storage.PedidosEstados = function () { }
+Storage.PedidosEstados.prototype = {}
+
+Storage.PedidosEstados.Leer = async function () {
+	return await Query('SELECT * FROM PedidosEstados ORDER BY Nombre');
+}
 
 
 

@@ -14,7 +14,11 @@ router.get('/', async function (req, res) {
     if (result.error) return res.render('error');
     var clientes = result;
 
-    return res.render('admin/pedidos', { pedidos, clientes });
+    var result = await Storage.PedidosEstados.Leer();
+    if (result.error) return res.render('error');
+    var estados = result;
+
+    return res.render('admin/pedidos', { pedidos, clientes, estados });
 });
 
 
@@ -29,7 +33,7 @@ router.get('/registrar', async function (req, res) {
     if (result.error) return res.render('error');
     var productos = result;
 
-    return res.render('admin/pedidos-registrar', { clientes, productos });
+    return res.render('admin/pedido-registrar', { clientes, productos });
 });
 router.post('/registrar', async function (req, res) {
     var cliente = Util.LimpiarInteger(req.body.cliente);
@@ -69,6 +73,35 @@ router.post('/registrar', async function (req, res) {
     }
 
     return res.redirect('/admin/pedidos');
+});
+
+
+
+/****          /admin/pedidos/<codigo>          ****/
+router.get('/:codigo', async function (req, res) {
+    var result = await Storage.Pedidos.LeerCodigo(req.params.codigo);
+    if (result.error) return res.render('error');
+    if (result.length == 0) return res.render('error');
+    var pedido = result[0];
+
+    var result = await Storage.Clientes.LeerClienteId(pedido.ClienteId);
+    if (result.error) return res.render('error');
+    if (result.length == 0) return res.render('error');
+    var cliente = result[0];
+
+    var result = await Storage.PedidosDetalles.LeerPedidoId(pedido.PedidoId);
+    if (result.error) return res.render('error');
+    var detalles = result;
+
+    var result = await Storage.Productos.LeerTodo();
+    if (result.error) return res.render('error');
+    var productos = result;
+
+    var result = await Storage.PedidosEstados.Leer();
+    if (result.error) return res.render('error');
+    var estados = result;
+
+    return res.render('admin/pedido', { pedido, cliente, detalles, productos, estados });
 });
 
 
