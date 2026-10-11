@@ -106,4 +106,23 @@ router.get('/:codigo', async function (req, res) {
 
 
 
+router.post('/actualizar-estado', async function (req, res) {
+    var id = Util.LimpiarInteger(req.body.id);
+    var estado = Util.LimpiarInteger(req.body.estado);
+
+    var result = await Storage.PedidosDetalles.ActualizarEstado(id, estado);
+    if (result.error) return res.render('error');
+    if (result.length == 0) return res.render('error');
+    var detalle = result[0];
+
+    var result = await Storage.Pedidos.LeerPedidoId(detalle.PedidoId);
+    if (result.error) return res.render('error');
+    if (result.length == 0) return res.render('error');
+    var pedido = result[0];
+
+    return res.redirect('/admin/pedidos/' + pedido.Codigo);
+});
+
+
+
 module.exports = router;

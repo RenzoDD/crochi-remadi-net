@@ -199,6 +199,9 @@ Storage.PedidosDetalles.Crear = async function (pedido, producto, cantidad, prec
 Storage.PedidosDetalles.LeerPedidoId = async function (pedido) {
 	return await Query('SELECT * FROM PedidosDetalles WHERE PedidoId = ? AND IsDeleted = 0', [pedido]);
 }
+Storage.PedidosDetalles.ActualizarEstado = async function (id, estado) {
+	return await Query('UPDATE PedidosDetalles SET EstadoId = ? WHERE DetalleId = ? RETURNING *', [estado, id]);
+}
 
 
 
@@ -206,7 +209,7 @@ Storage.PedidosEstados = function () { }
 Storage.PedidosEstados.prototype = {}
 
 Storage.PedidosEstados.Leer = async function () {
-	return await Query('SELECT * FROM PedidosEstados ORDER BY Nombre');
+	return await Query('SELECT * FROM PedidosEstados');
 }
 
 
