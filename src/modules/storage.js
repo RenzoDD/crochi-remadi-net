@@ -214,4 +214,28 @@ Storage.PedidosEstados.Leer = async function () {
 
 
 
+Storage.Boletas = function () { }
+Storage.Boletas.prototype = {}
+
+Storage.Boletas.Crear = async function (pedido, numero, cliente, emision, monto, xml) {
+	var result = await Query('SELECT * FROM Boletas WHERE upper(Numero) = upper(?) AND IsDeleted = 0', [numero]);
+	if (result.error) return result;
+
+	if (result.length > 0)
+		return { error: 'Ya existe una boleta con este número' };
+
+	return await Query('INSERT INTO Boletas (PedidoId, Numero, Cliente, Emision, Monto, XML) VALUES (?, ?, ?, ?, ?, ?) RETURNING *', [pedido, numero, cliente, emision, monto, xml]);
+}
+Storage.Boletas.Leer = async function () {
+	return await Query('SELECT * FROM Boletas WHERE IsDeleted = 0 ORDER BY Emision DESC');
+}
+Storage.Boletas.LeerPedidoId = async function (pedido) {
+	return await Query('SELECT * FROM Boletas WHERE PedidoId = ? AND IsDeleted = 0', [pedido]);
+}
+Storage.Boletas.Eliminar = async function (id) {
+	return await Query('UPDATE Boletas SET IsDeleted = 1 WHERE BoletaId = ? RETURNING *', [id]);
+}
+
+
+
 module.exports = Storage;

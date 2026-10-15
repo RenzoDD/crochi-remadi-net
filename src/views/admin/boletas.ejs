@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Crochi Perú - Admin</title>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+    <%- include('../partials/header', { navbar: 'admin' , item: 'pedidos' }) %>
+
+    <main class="main container">
+        <nav class="my-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+                <li class="breadcrumb-item active">SUNAT</li>
+                <li class="breadcrumb-item active">Boletas</li>
+            </ol>
+        </nav>
+		<div class="my-3 text-end">
+            <a href="https://e-menu.sunat.gob.pe/cl-ti-itmenu/MenuInternet.htm?pestana=*&agrupacion=*&exe=11.5.4.1.1" class="btn btn-primary" target="_blank">
+                <i class="bi bi-receipt-cutoff"></i>
+                Emitir Boleta
+            </a>
+		</div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="align-middle">
+                    <tr>
+                        <th scope="col">Numero</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Emisión</th>
+                        <th scope="col">Monto</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle" style="white-space: nowrap">
+                    <% for (var boleta of boletas) { %>
+                    <tr>
+                        <td class="fw-bold"><%- boleta.Numero %></td>
+                        <td><%- boleta.Cliente %></td>
+                        <td><%- new Date(boleta.Emision).toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
+                        <td>S/ <%- boleta.Monto.toFixed(2) %></td>
+                        <th>
+                            <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#eliminar-boleta">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </th>
+                    </tr>
+                    <% } %>
+                </tbody>
+                <caption id="caption">
+                    Se ha registrado <%- boletas.length %> boletas(s)
+                </caption>
+            </table>
+        </div>
+    </main>
+
+    <%- include('../partials/script') %>
+</body>
+
+</html>

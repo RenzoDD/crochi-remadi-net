@@ -42,7 +42,7 @@
                         <th scope="row"><%- n++ %></th>
                         <td class="fw-bold"><%- pedido.Codigo %></td>
                         <td><%- cliente ? cliente.Nombre : '' %></td>
-                        <td><%- pedido.FechaEntrega %></td>
+                        <td><%- new Date(pedido.FechaEntrega).toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
                         <td>
                             <span class="badge rounded-pill bg-<%- estado.Color %>">
                                 <%- estado.Nombre %>

@@ -101,7 +101,11 @@ router.get('/:codigo', async function (req, res) {
     if (result.error) return res.render('error');
     var estados = result;
 
-    return res.render('admin/pedido', { pedido, cliente, detalles, productos, estados });
+    var result = await Storage.Boletas.LeerPedidoId(pedido.PedidoId);
+    if (result.error) return res.render('error');
+    var boletas = result;
+
+    return res.render('admin/pedido', { pedido, cliente, detalles, productos, estados, boletas });
 });
 
 
