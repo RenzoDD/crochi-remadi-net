@@ -6,4 +6,11 @@ router.get('/', async function (req, res) {
 	return res.render('admin/inicio', { });
 });
 
+
+
+/****          /admin/sunat          ****/
+router.get('/sunat', async function (req, res) {
+	return res.render('admin/sunat', { });
+});
+
 module.exports = router;
