@@ -14,61 +14,53 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
                 <li class="breadcrumb-item active">Movimientos</li>
+                <li class="breadcrumb-item active"><%- saldo.toFixed(2) %></li>
             </ol>
         </nav>
-		<div class="my-5 text-center">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="input-group input-group-sm" style="width: max-content;">
-                        <span class="input-group-text">Saldo</span>
-                        <input type="text" class="form-control text-end" value="S/ <%- saldo.toFixed(2) %>" readonly>
-                    </div>
-                </div>
-                <div class="col-md-6 text-end mb-3">
-                    <a class="btn btn-primary btn-sm ms-3" href="https://bcpzonasegura.viabcp.com/#/portal/mis-productos" target="_blank">
-                        <i class="bi bi-link-45deg"></i>
-                    </a>
-                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#registrar">
-                        <i class="bi bi-safe"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-center">#</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Tipo</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col" class="text-center">Monto</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody class="align-middle">
-                        <% for (var movimiento of movimientos) { %>
-                            <tr>
-                                <th scope="row" class="text-center"><%- movimiento.Codigo %></th>
-                                <td><%- movimiento.Fecha %></td>
-                                <td><%- tipos.find(t => t.TipoId === movimiento.TipoId).Nombre %></td>
-                                <td><%- movimiento.Descripcion %></td>
-                                <td class="text-end">
-                                    <% if (movimiento.Ingreso > 0) { %>
-                                        <span class="text-success">S/ +<%- movimiento.Ingreso.toFixed(2) %></span>
-                                    <% } else { %>
-                                        <span class="text-danger">S/ -<%- movimiento.Egreso.toFixed(2) %></span>
-                                    <% } %>
-                                </td>
-                                <td class="text-end">
-                                </td>
-                            </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div>
+		<div class="my-3 text-end">
+            <a class="btn btn-dark ms-3" href="https://bcpzonasegura.viabcp.com/#/portal/mis-productos" target="_blank">
+                <i class="bi bi-bank"></i> BCP
+            </a>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrar">
+                <i class="bi bi-cash-coin"></i>
+                Registrar Movimiento
+            </button>
 		</div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center">#</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col" class="text-center">Monto</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    <% for (var movimiento of movimientos) { %>
+                        <tr>
+                            <th scope="row" class="text-center"><%- movimiento.Codigo %></th>
+                            <td><%- movimiento.Fecha %></td>
+                            <td><%- tipos.find(t => t.TipoId === movimiento.TipoId).Nombre %></td>
+                            <td><%- movimiento.Descripcion %></td>
+                            <td class="text-end">
+                                <% if (movimiento.Ingreso > 0) { %>
+                                    <span class="text-success">S/ +<%- movimiento.Ingreso.toFixed(2) %></span>
+                                <% } else { %>
+                                    <span class="text-danger">S/ -<%- movimiento.Egreso.toFixed(2) %></span>
+                                <% } %>
+                            </td>
+                            <td class="text-end">
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
 	</main>
-    
+
     <div class="modal fade" id="registrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <form action="/admin/movimientos/registrar" method="post" onsubmit="return (this._submitted ? false : (this._submitted = true))" onkeydown="if(event.key === 'Enter'){event.preventDefault(); return false;}" class="modal-content">
