@@ -23,7 +23,7 @@ router.post('/registrar', upload.any(), async function (req, res) {
     var boleta = upload.read(req.files[0].filename).toString();
     var xml = ParseBoleta(boleta);
 
-    var result = await Storage.Boletas.Crear(pedido, xml.serie + '-' + xml.correlativo.padStart(10, '0'), xml.cliente, 0, xml.montoTotal, boleta);
+    var result = await Storage.Boletas.Crear(pedido, xml.comprobante.serie + '-' + xml.comprobante.correlativo, xml.cliente.nombre, xml.comprobante.fechaEmision, xml.totales.total, boleta);
     if (result.error) return res.render('error');
     if (result.length == 0) return res.render('error');
 

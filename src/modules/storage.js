@@ -238,4 +238,32 @@ Storage.Boletas.Eliminar = async function (id) {
 
 
 
+Storage.MovimientosTipos = function () { }
+Storage.MovimientosTipos.prototype = {}
+
+Storage.MovimientosTipos.Leer = async function () {
+	return await Query('SELECT * FROM MovimientosTipos');
+}
+
+
+
+Storage.Movimientos = function () { }
+Storage.Movimientos.prototype = {}
+
+Storage.Movimientos.Crear = async function (tipo, codigo, fecha, descripcion, ingreso, egreso) {
+	return await Query('INSERT INTO Movimientos (TipoId, Codigo, Fecha, Descripcion, Ingreso, Egreso) VALUES (?, ?, ?, ?, ?, ?) RETURNING *', [tipo, codigo, fecha, descripcion, ingreso, egreso]);
+}
+Storage.Movimientos.Leer = async function () {
+	return await Query('SELECT M.*, T.Nombre AS TipoNombre FROM Movimientos M LEFT JOIN MovimientosTipos T ON M.TipoId = T.TipoId WHERE M.IsDeleted = 0 ORDER BY M.Fecha DESC');
+}
+Storage.Movimientos.LeerSaldos = async function () {
+	var result = await Query('SELECT SUM(Ingreso) AS Ingreso, SUM(Egreso) AS Egreso FROM Movimientos WHERE IsDeleted = 0');
+	if (result.error) return result;
+	return result;
+}
+Storage.Movimientos.Eliminar = async function (id) {
+	return await Query('UPDATE Movimientos SET IsDeleted = 1 WHERE MovimientoId = ? RETURNING *', [id]);
+}
+
+
 module.exports = Storage;

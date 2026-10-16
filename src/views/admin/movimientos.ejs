@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Crochi Perú - Admin</title>
+	<%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+	<%- include('../partials/header', { navbar: 'admin', item: 'movimientos' }) %>
+
+	<main class="main container">
+        <nav class="my-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+                <li class="breadcrumb-item active">Movimientos</li>
+            </ol>
+        </nav>
+		<div class="my-5 text-center">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="input-group input-group-sm" style="width: max-content;">
+                        <span class="input-group-text">Saldo</span>
+                        <input type="text" class="form-control text-end" value="S/ <%- saldo.toFixed(2) %>" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end mb-3">
+                    <a class="btn btn-primary btn-sm ms-3" href="https://bcpzonasegura.viabcp.com/#/portal/mis-productos" target="_blank">
+                        <i class="bi bi-link-45deg"></i>
+                    </a>
+                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#registrar">
+                        <i class="bi bi-safe"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">#</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col" class="text-center">Monto</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        <% for (var movimiento of movimientos) { %>
+                            <tr>
+                                <th scope="row" class="text-center"><%- movimiento.Codigo %></th>
+                                <td><%- movimiento.Fecha %></td>
+                                <td><%- tipos.find(t => t.TipoId === movimiento.TipoId).Nombre %></td>
+                                <td><%- movimiento.Descripcion %></td>
+                                <td class="text-end">
+                                    <% if (movimiento.Ingreso > 0) { %>
+                                        <span class="text-success">S/ +<%- movimiento.Ingreso.toFixed(2) %></span>
+                                    <% } else { %>
+                                        <span class="text-danger">S/ -<%- movimiento.Egreso.toFixed(2) %></span>
+                                    <% } %>
+                                </td>
+                                <td class="text-end">
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+		</div>
+	</main>
+    
+    <div class="modal fade" id="registrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <form action="/admin/movimientos/registrar" method="post" onsubmit="return (this._submitted ? false : (this._submitted = true))" onkeydown="if(event.key === 'Enter'){event.preventDefault(); return false;}" class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">
+                        <i class="bi bi-safe"></i>
+                        Registrar Movimiento
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-start">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold">Fecha</label>
+                            <input type="date" class="form-control" name="fecha" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold">Código</label>
+                            <input type="text" class="form-control" name="codigo" placeholder="0000000" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="fw-bold">Tipos</label>
+                            <select class="form-select" name="tipo" required>
+                                <option selected disabled></option>
+                                <% for (var tipo of tipos) { %>
+                                    <option value="<%= tipo.TipoId %>"><%= tipo.Nombre %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+							<label class="fw-bold">Ingreso</label>
+                            <div class="input-group">
+                                <span class="input-group-text">S/</span>
+							    <input type="number" class="form-control text-end" id="ingreso" name="ingreso" oninput="BloquearIngresoEgreso()">
+                            </div>
+						</div>
+						<div class="col-md-6 mb-3">
+							<label class="fw-bold">Egreso</label>
+							<div class="input-group">
+								<span class="input-group-text">S/</span>
+								<input type="number" class="form-control text-end" id="egreso" name="egreso" oninput="BloquearIngresoEgreso()">
+							</div>
+						</div>
+						<script>
+							function BloquearIngresoEgreso() {
+								var ingreso = document.getElementById('ingreso');
+								var egreso = document.getElementById('egreso');
+
+								if (isNaN(parseFloat(egreso.value)) && isNaN(parseFloat(ingreso.value))) {
+									ingreso.disabled = false;
+									egreso.disabled = false;
+									return;
+								}
+
+								if (!isNaN(parseFloat(ingreso.value))) {
+									ingreso.disabled = false;
+									egreso.value = "";
+									egreso.disabled = true;
+									return;
+								}
+
+								if (!isNaN(parseFloat(egreso.value))) {
+									ingreso.value = "";
+									ingreso.disabled = true;
+									egreso.disabled = false;
+									return;
+								}
+							}
+						</script>
+                        <div class="col-12 mb-3">
+                            <label class="fw-bold">Descripción</label>
+                            <input type="text" class="form-control" name="descripcion">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+	<%- include('../partials/script') %>
+</body>
+
+</html>
