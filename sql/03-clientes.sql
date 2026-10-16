@@ -4,6 +4,7 @@ CREATE TABLE Clientes (
 	Nombre varchar(50) NOT NULL,
 	WhatsApp varchar(50),
 	Celular varchar(50),
+	DNI varchar(15),
 
 	CreatedAt integer NOT NULL DEFAULT (unixepoch() * 1000),
 	UpdatedAt integer NOT NULL DEFAULT (unixepoch() * 1000),

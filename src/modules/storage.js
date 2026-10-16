@@ -116,14 +116,14 @@ Storage.Productos.Eliminar = async function (id) {
 Storage.Clientes = function () { }
 Storage.Clientes.prototype = {}
 
-Storage.Clientes.Crear = async function (nombre, whatsapp, celular) {
+Storage.Clientes.Crear = async function (nombre, whatsapp, celular, dni) {
 	var result = await Query('SELECT * FROM Clientes WHERE upper(Nombre) = upper(?) AND IsDeleted = 0', [nombre]);
 	if (result.error) return result;
 
 	if (result.length > 0)
 		return { error: 'Ya existe un cliente con este nombre' };
 
-	return await Query('INSERT INTO Clientes (Nombre, WhatsApp, Celular) VALUES (?, ?, ?) RETURNING *', [nombre, whatsapp, celular]);
+	return await Query('INSERT INTO Clientes (Nombre, WhatsApp, Celular, DNI) VALUES (?, ?, ?, ?) RETURNING *', [nombre, whatsapp, celular, dni]);
 }
 Storage.Clientes.Leer = async function () {
     return await Query('SELECT * FROM Clientes WHERE IsDeleted = 0 ORDER BY Nombre');
@@ -134,14 +134,14 @@ Storage.Clientes.LeerTodo = async function () {
 Storage.Clientes.LeerClienteId = async function (id) {
     return await Query('SELECT * FROM Clientes WHERE ClienteId = ? AND IsDeleted = 0', [id]);
 }
-Storage.Clientes.Actualizar = async function (id, nombre, whatsapp, celular) {
+Storage.Clientes.Actualizar = async function (id, nombre, whatsapp, celular, dni) {
 	var result = await Query('SELECT * FROM Clientes WHERE upper(Nombre) = upper(?) AND IsDeleted = 0', [nombre]);
 	if (result.error) return result;
 
 	if (result.length > 0 && result[0].ClienteId != id)
 		return { error: 'Ya existe un cliente con este nombre' };
 
-    return await Query('UPDATE Clientes SET Nombre = ?, WhatsApp = ?, Celular = ?, UpdatedAt = (unixepoch() * 1000) WHERE ClienteId = ? RETURNING *', [nombre, whatsapp, celular, id]);
+    return await Query('UPDATE Clientes SET Nombre = ?, WhatsApp = ?, Celular = ?, DNI = ?, UpdatedAt = (unixepoch() * 1000) WHERE ClienteId = ? RETURNING *', [nombre, whatsapp, celular, dni, id]);
 };
 Storage.Clientes.Eliminar = async function (id) {
     return await Query('UPDATE Clientes SET IsDeleted = 1 WHERE ClienteId = ? RETURNING *', [id]);
