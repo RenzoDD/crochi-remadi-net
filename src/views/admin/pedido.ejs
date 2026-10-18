@@ -17,6 +17,11 @@
                 <li class="breadcrumb-item active"><%- pedido.Codigo %></li>
             </ol>
         </nav>
+        <div class="text-end mb-3">
+            <a href="/admin/pedidos/<%- pedido.Codigo %>/editar" class="btn">
+                <i class="bi bi-pencil"></i>
+            </a>
+        </div>
         <div class="row mb-3">
             <div class="col-md-6 mb-4">
                 <label class="fw-bold">Cliente</label>

@@ -202,6 +202,12 @@ Storage.PedidosDetalles.LeerPedidoId = async function (pedido) {
 Storage.PedidosDetalles.ActualizarEstado = async function (id, estado) {
 	return await Query('UPDATE PedidosDetalles SET EstadoId = ? WHERE DetalleId = ? RETURNING *', [estado, id]);
 }
+Storage.PedidosDetalles.Actualizar = async function (id, producto, cantidad, precio) {
+	return await Query('UPDATE PedidosDetalles SET ProductoId = ?, Cantidad = ?, PrecioUnitario = ?, UpdatedAt = (unixepoch() * 1000) WHERE DetalleId = ? RETURNING *', [producto, cantidad, precio, id]);
+}
+Storage.PedidosDetalles.Eliminar = async function (id) {
+	return await Query('UPDATE PedidosDetalles SET IsDeleted = 1 WHERE DetalleId = ? RETURNING *', [id]);
+}
 
 
 

@@ -4,6 +4,8 @@ const router = express.Router();
 const Storage = require('../../modules/storage');
 const Util = require('../../modules/util');
 
+
+
 /****          /admin/pedidos          ****/
 router.get('/', async function (req, res) {
     var result = await Storage.Pedidos.Leer();
@@ -73,6 +75,97 @@ router.post('/registrar', async function (req, res) {
     }
 
     return res.redirect('/admin/pedidos');
+});
+
+
+
+/****          /admin/pedidos/<codigo>/editar          ****/
+router.get('/:codigo/editar', async function (req, res) {
+    var result = await Storage.Pedidos.LeerCodigo(req.params.codigo);
+    if (result.error) return res.render('error');
+    if (result.length == 0) return res.render('error');
+    var pedido = result[0];
+
+    var result = await Storage.Clientes.LeerClienteId(pedido.ClienteId);
+    if (result.error) return res.render('error');
+    if (result.length == 0) return res.render('error');
+    var cliente = result[0];
+
+    var result = await Storage.PedidosDetalles.LeerPedidoId(pedido.PedidoId);
+    if (result.error) return res.render('error');
+    var detalles = result;
+
+    var result = await Storage.Productos.LeerTodo();
+    if (result.error) return res.render('error');
+    var productos = result;
+
+    var result = await Storage.PedidosEstados.Leer();
+    if (result.error) return res.render('error');
+    var estados = result;
+
+    var result = await Storage.Clientes.Leer();
+    if (result.error) return res.render('error');
+    var clientes = result;
+
+    return res.render('admin/pedido-editar', { pedido, cliente, detalles, productos, estados, clientes });
+});
+router.post('/editar', async function (req, res) {
+    var pedido = Util.LimpiarInteger(req.body.pedido);
+    var cliente = Util.LimpiarInteger(req.body.cliente);
+    var fecha = new Date(req.body.fecha).toISOString().slice(0, 10);
+    var adelanto = Util.LimpiarDecimal(req.body.adelanto) || 0;
+    var comentario = Util.LimpiarTexto(req.body.comentario, 500);
+
+    var total = 0;
+    var detalles = [];
+    for (var key of Object.keys(req.body)) {
+        if (!key.startsWith('detalle')) continue;
+        if (key.split('-')[1] != 'producto') continue;
+
+        var n = key.split('-')[2];
+
+        var id = parseInt(req.body['detalle-id-' + n]) || null;
+        var producto = parseInt(req.body['detalle-producto-' + n]);
+        var cantidad = parseInt(req.body['detalle-cantidad-' + n]);
+        var precio = parseFloat(req.body['detalle-precio-' + n]);
+
+        if (isNaN(producto + cantidad + precio)) continue;
+
+        detalles.push({ id, producto, cantidad, precio });
+        total += parseFloat((cantidad * precio).toFixed(2));
+    }
+
+    if (isNaN(pedido + cliente)) return res.render('error');
+    if (adelanto > total) return res.render('error');
+
+    var result = await Storage.Pedidos.Actualizar(pedido, cliente, fecha, adelanto, total, comentario);
+    if (result.error) return res.render('error');
+    if (result.length == 0) return res.render('error');
+    var pedido = result[0];
+
+    var result = await Storage.PedidosDetalles.LeerPedidoId(pedido.PedidoId);
+    if (result.error) return res.render('error');
+    var detallesActuales = result;
+
+    for (var detalleActual of detallesActuales) {
+        if (!detalles.find(detalle => detalle.id === detalleActual.DetalleId)) {
+            var result = await Storage.PedidosDetalles.Eliminar(detalleActual.DetalleId);
+            if (!result) return res.render('error');
+        }
+    }
+
+    for (var detalle of detalles) {
+        if (detalle.id) {
+            var result = await Storage.PedidosDetalles.Actualizar(detalle.id, detalle.producto, detalle.cantidad, detalle.precio);
+            if (!result) return res.render('error');
+        } else {
+            console.log('Creando detalle', detalle);
+            var result = await Storage.PedidosDetalles.Crear(pedido.PedidoId, detalle.producto, detalle.cantidad, detalle.precio);
+            if (!result) return res.render('error');
+        }
+    }
+    
+    return res.redirect('/admin/pedidos/' + pedido.Codigo);
 });
 
 
