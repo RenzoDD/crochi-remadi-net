@@ -260,7 +260,7 @@ Storage.Movimientos.Crear = async function (tipo, codigo, fecha, descripcion, in
 	return await Query('INSERT INTO Movimientos (TipoId, Codigo, Fecha, Descripcion, Ingreso, Egreso) VALUES (?, ?, ?, ?, ?, ?) RETURNING *', [tipo, codigo, fecha, descripcion, ingreso, egreso]);
 }
 Storage.Movimientos.Leer = async function () {
-	return await Query('SELECT M.*, T.Nombre AS TipoNombre FROM Movimientos M LEFT JOIN MovimientosTipos T ON M.TipoId = T.TipoId WHERE M.IsDeleted = 0 ORDER BY M.Fecha DESC');
+	return await Query('SELECT M.*, T.Nombre AS TipoNombre FROM Movimientos M LEFT JOIN MovimientosTipos T ON M.TipoId = T.TipoId WHERE M.IsDeleted = 0 ORDER BY M.Fecha DESC, M.CreatedAt DESC');
 }
 Storage.Movimientos.LeerSaldos = async function () {
 	var result = await Query('SELECT SUM(Ingreso) AS Ingreso, SUM(Egreso) AS Egreso FROM Movimientos WHERE IsDeleted = 0');
