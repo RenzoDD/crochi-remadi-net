@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>CROCHI - Boletas</title>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+    <%- include('../partials/header', { navbar: 'public' , item: 'boletas' }) %>
+
+    <main class="main container">
+        <h1 class="my-5 text-center">
+            Buscar boleta
+        </h1>
+        <div class="row justify-content-center">
+            <form action="/boleta" method="post" class="col-md-8 col-lg-6">
+                <div class="mb-3">
+                    <label for="" class="fw-bold">Serie y número de comprobante</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text">
+                            <i class="bi bi-receipt-cutoff"></i>
+                        </span>
+                        <input type="text" class="form-control" name="serie" placeholder="EB01">
+                        <span class="input-group-text">-</span>
+                        <input type="text" class="form-control" name="correlativo" placeholder="0000000000">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="" class="fw-bold">Fecha de emisión</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text">
+                            <i class="bi bi-calendar"></i>
+                        </span>
+                        <input type="date" class="form-control" name="emision">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="" class="fw-bold">Importe total</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text">
+                            S/
+                        </span>
+                        <input type="number" class="form-control" name="monto">
+                    </div>
+                </div>
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <button class="btn btn-primary">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <%- include('../partials/script') %>
+</body>
+
+</html>

@@ -233,7 +233,13 @@ Storage.Boletas.Crear = async function (pedido, numero, cliente, emision, monto,
 	return await Query('INSERT INTO Boletas (PedidoId, Numero, Cliente, Emision, Monto, XML) VALUES (?, ?, ?, ?, ?, ?) RETURNING *', [pedido, numero, cliente, emision, monto, xml]);
 }
 Storage.Boletas.Leer = async function () {
-	return await Query('SELECT * FROM Boletas WHERE IsDeleted = 0 ORDER BY Emision DESC');
+	return await Query('SELECT * FROM Boletas WHERE IsDeleted = 0 ORDER BY Numero DESC');
+}
+Storage.Boletas.LeerNumero = async function (numero) {
+	return await Query('SELECT * FROM Boletas WHERE Numero = ? AND IsDeleted = 0', [ numero ]);
+}
+Storage.Boletas.LeerBoleta = async function (numero, emision, monto) {
+	return await Query('SELECT * FROM Boletas WHERE Numero = ? AND Emision = ? AND Monto = ? AND IsDeleted = 0', [numero, emision, monto]);
 }
 Storage.Boletas.LeerPedidoId = async function (pedido) {
 	return await Query('SELECT * FROM Boletas WHERE PedidoId = ? AND IsDeleted = 0', [pedido]);

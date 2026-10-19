@@ -23,6 +23,8 @@ app.use(session({
 	cookie: { secure: true, httpOnly: true, maxAge: 63072000000, sameSite: 'strict' }
 }));
 
+app.use('/', require('./routes/public'));
+
 app.use(async function (req, res, next) {
 	// logged user lookup
 	return next();
