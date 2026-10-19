@@ -11,7 +11,7 @@ router.get('/boleta', async function (req, res) {
 });
 router.post('/boleta', async function (req, res) {
     var serie = Util.LimpiarTexto(req.body.serie, 4);
-    var correlativo = Util.LimpiarTexto(req.body.correlativo, 10).padStart(10, '0');
+    var correlativo = Util.LimpiarTexto(req.body.correlativo, 10).padStart(8, '0');
     var numero = serie + '-' + correlativo;
     var emision = new Date(req.body.emision).toISOString().substring(0, 10)
     var monto = Util.LimpiarDecimal(req.body.monto);

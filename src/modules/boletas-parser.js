@@ -410,7 +410,7 @@ function DecodificarBoleta(xml) {
 
     correlativo:
       partesId.length >= 2
-        ? partesId[partesId.length - 1].padStart(10, '0')
+        ? partesId[partesId.length - 1].padStart(8, '0')
         : null,
 
     fechaEmision: valor(invoice.IssueDate),
