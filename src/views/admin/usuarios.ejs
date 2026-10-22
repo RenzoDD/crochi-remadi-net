@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Crochi Perú - Admin</title>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+    <%- include('../partials/header', { navbar: 'admin' , item: 'usuarios' }) %>
+
+    <main class="main container">
+        <nav class="my-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+                <li class="breadcrumb-item active">Usuarios</li>
+            </ol>
+        </nav>
+		<div class="my-3 text-end">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrar">
+            	<i class="bi bi-person"></i> Registrar usuario
+            </button>
+		</div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Correo</th>
+                    <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% var n = 1 %>
+                    <% for (var usuario of usuarios) { %>
+                    <tr>
+                        <th scope="row"><%- n++ %></th>
+                        <td><%- usuario.Nombre %></td>
+                        <td><%- usuario.Correo %></td>
+                        <td>
+                            <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#actualizar" onclick="ActualizarUsuario(<%- usuario.UsuarioId %>, '<%- usuario.Nombre %>', '<%- usuario.Correo %>')">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+                <caption>
+                    Se encontró <%- usuarios.length %> usuarios(s)
+                </caption>
+            </table>
+        </div>
+    </main>
+
+    <div class="modal fade" id="registrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <form action="/admin/usuarios/registrar" method="post" class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">
+                        <i class="bi bi-person"></i> Registrar Usuario
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre" class="fw-bold">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombre" class="fw-bold">Correo</label>
+                        <input type="email" class="form-control" id="correo" name="correo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombre" class="fw-bold">Contraseña</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="clave" name="clave">
+                            <span class="btn btn-primary" onclick="document.getElementById('clave').type = document.getElementById('clave').type == 'password' ? 'text' : 'password'; document.getElementById('clave-icon').className = document.getElementById('clave').type == 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';">
+                                <i class="bi bi-eye" id="clave-icon"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="actualizar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <form action="/admin/usuarios/actualizar" method="post" class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">
+                        <i class="bi bi-pencil"></i> Actualizar Usuario
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre" class="fw-bold">Nombre</label>
+                        <input type="text" class="form-control" id="actualizar-nombre" name="nombre">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombre" class="fw-bold">Correo</label>
+                        <input type="email" class="form-control" id="actualizar-correo" name="correo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombre" class="fw-bold">Contraseña</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="actualizar-clave" name="clave">
+                            <span class="btn btn-primary" onclick="document.getElementById('clave').type = document.getElementById('clave').type == 'password' ? 'text' : 'password'; document.getElementById('clave-icon').className = document.getElementById('clave').type == 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';">
+                                <i class="bi bi-eye" id="clave-icon"></i>
+                            </span>
+                        </div>
+                        <small>Si no desea cambiar la contraseña, deje este campo vacío</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="actualizar-usuario" name="usuario">
+                    <button class="btn btn-primary">Registrar</button>
+                </div>
+                <script>
+                    function ActualizarUsuario(id, nombre, correo) {
+                        document.getElementById('actualizar-usuario').value = id;
+                        document.getElementById('actualizar-nombre').value = nombre;
+                        document.getElementById('actualizar-correo').value = correo;
+                    }
+                </script>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/script') %>
+</body>
+
+</html>

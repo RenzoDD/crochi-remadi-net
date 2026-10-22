@@ -112,11 +112,23 @@ Storage.Usuarios.Verificar = async function (correo, clave) {
 Storage.Usuarios.LeerCantidad = async function () {
 	return await Query('SELECT COUNT(*) AS Cantidad FROM Usuarios WHERE IsDeleted = 0');
 }
+Storage.Usuarios.Leer = async function () {
+	return await Query('SELECT * FROM Usuarios WHERE IsDeleted = 0');
+}
 Storage.Usuarios.LeerUsuarioId = async function (id) {
 	return await Query('SELECT * FROM Usuarios WHERE UsuarioId = ? AND IsDeleted = 0', [id]);
 }
 Storage.Usuarios.LeerCorreo = async function (correo) {
 	return await Query('SELECT * FROM Usuarios WHERE Correo = ? AND IsDeleted = 0', [correo]);
+}
+Storage.Usuarios.Actualizar = async function (id, nombre, correo) {
+	return await Query('UPDATE Usuarios SET Nombre = ?, Correo = ? WHERE UsuarioId = ? RETURNING *', [nombre, correo, id]);
+}
+Storage.Usuarios.ActualizarClave = async function (id, clave) {
+	var salt = Util.SHA256(Math.random() + Math.random() + Math.random());
+	var clave = Util.SHA256(clave + '[crochi]' + salt);
+
+	return await Query('UPDATE Usuarios SET Clave = ?, Salt = ? WHERE UsuarioId = ? RETURNING *', [clave, salt, id]);
 }
 
 

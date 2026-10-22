@@ -43,6 +43,7 @@ app.use(async function (req, res, next) {
 });
 
 app.use('/admin', require('./routes/admin'));
+app.use('/admin/usuarios', require('./routes/admin/usuarios'));
 app.use('/admin/productos', require('./routes/admin/productos'));
 app.use('/admin/clientes', require('./routes/admin/clientes'));
 app.use('/admin/pedidos', require('./routes/admin/pedidos'));
