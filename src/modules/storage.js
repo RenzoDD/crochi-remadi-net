@@ -1,3 +1,5 @@
+const Util = require('./util');
+
 const fs = require('fs');
 const path = require('path');
 
@@ -87,6 +89,35 @@ Storage.Backup = async function () {
 };
 setInterval(Storage.Backup, 60 * 60 * 1000) // Una hora
 
+
+
+Storage.Usuarios = function () { }
+Storage.Usuarios.prototype = {}
+
+Storage.Usuarios.Crear = async function (nombre, correo, clave) {
+	var salt = Util.SHA256(Math.random() + Math.random() + Math.random());
+	var clave = Util.SHA256(clave + '[crochi]' + salt);
+
+	return await Query('INSERT INTO Usuarios (Nombre, Correo, Clave, Salt) VALUES (?, ?, ?, ?) RETURNING *', [nombre, correo, clave, salt]);
+}
+Storage.Usuarios.Verificar = async function (correo, clave) {
+	var result = await Query('SELECT * FROM Usuarios WHERE Correo = ? AND IsDeleted = 0 LIMIT 1', [correo]);
+	if (result.error) return result;
+	if (result.length == 0) return false;
+	var usuario = result[0];
+
+	var clave = Util.SHA256(clave + '[crochi]' + usuario.Salt);
+	return usuario.Clave === clave;
+}
+Storage.Usuarios.LeerCantidad = async function () {
+	return await Query('SELECT COUNT(*) AS Cantidad FROM Usuarios WHERE IsDeleted = 0');
+}
+Storage.Usuarios.LeerUsuarioId = async function (id) {
+	return await Query('SELECT * FROM Usuarios WHERE UsuarioId = ? AND IsDeleted = 0', [id]);
+}
+Storage.Usuarios.LeerCorreo = async function (correo) {
+	return await Query('SELECT * FROM Usuarios WHERE Correo = ? AND IsDeleted = 0', [correo]);
+}
 
 
 Storage.Productos = function () { }

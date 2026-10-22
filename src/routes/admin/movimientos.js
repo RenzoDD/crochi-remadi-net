@@ -18,7 +18,7 @@ router.get('/', async function (req, res) {
     if (result.error) return res.render('error');
     var tipos = result;
 
-    return res.render('admin/movimientos', { movimientos, saldo, tipos });
+    return res.render('admin/movimientos', { logged: req.logged, movimientos, saldo, tipos });
 });
 
 

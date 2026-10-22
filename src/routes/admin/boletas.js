@@ -13,7 +13,7 @@ router.get('/', async function (req, res) {
     if (result.error) return res.render('error');
     var boletas = result;
 
-    return res.render('admin/boletas', { boletas });
+    return res.render('admin/boletas', { logged: req.logged, boletas });
 });
 
 
@@ -58,7 +58,7 @@ router.get('/:numero', async function (req, res) {
     if (result.length == 0) return res.render('error');
     var boleta = DecodificarBoleta(result[0].XML);
 
-    return res.render('public/boleta', { boleta });
+    return res.render('public/boleta', { logged: req.logged, boleta });
 });
 /****          /admin/boletas/{numero}/xml          ****/
 router.get('/:numero/xml', async function (req, res) {

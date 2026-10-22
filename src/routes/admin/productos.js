@@ -10,14 +10,14 @@ router.get('/', async function (req, res) {
     if (result.error) return res.render('error');
     var productos = result;
 
-    return res.render('admin/productos', { productos });
+    return res.render('admin/productos', { logged: req.logged, productos });
 });
 
 
 
 /****          /admin/productos/registrar          ****/
 router.get('/registrar', async function (req, res) {
-    return res.render('admin/producto-registrar', {  });
+    return res.render('admin/producto-registrar', { logged: req.logged });
 });
 router.post('/registrar', async function (req, res) {
     var nombre = Util.LimpiarTexto(req.body.nombre, 50);

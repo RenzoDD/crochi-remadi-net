@@ -1,7 +1,8 @@
 CREATE TABLE Usuarios (
 	UsuarioId integer NOT NULL CONSTRAINT Usuarios_pk PRIMARY KEY AUTOINCREMENT,
 
-	Usuario varchar(50) NOT NULL,
+	Nombre varchar(50) NOT NULL,
+	Correo varchar(50) NOT NULL,
 	Clave varchar(64) NULL,
 	Salt varchar(64) NULL,
 

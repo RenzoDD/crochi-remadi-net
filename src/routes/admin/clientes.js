@@ -10,14 +10,14 @@ router.get('/', async function (req, res) {
     if (result.error) return res.render('error');
     var clientes = result;
 
-    return res.render('admin/clientes', { clientes });
+    return res.render('admin/clientes', { logged: req.logged, clientes });
 });
 
 
 
 /****          /admin/clientes/registrar          ****/
 router.get('/registrar', async function (req, res) {
-    return res.render('admin/cliente-registrar', {  });
+    return res.render('admin/cliente-registrar', { logged: req.logged });
 });
 router.post('/registrar', async function (req, res) {
     var nombre = Util.LimpiarTexto(req.body.nombre, 50);

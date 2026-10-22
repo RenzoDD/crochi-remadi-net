@@ -20,14 +20,26 @@ app.use(session({
 	secret: '912d3b85552d8a6b7723621b74cae21b1293eb301116515890bb1dc2e2cdb615',
 	resave: false,
 	saveUninitialized: false,
-	cookie: { secure: true, httpOnly: true, maxAge: 63072000000, sameSite: 'strict' }
+	cookie: { secure: process.env.NODE_ENV === 'production', httpOnly: true, maxAge: 63072000000, sameSite: 'strict' }
 }));
+
+app.use(async function (req, res, next) {
+    var UsuarioId = req.session.usuario;
+    if (process.env.NODE_ENV === 'development') UsuarioId = 1;
+
+    var result = await Storage.Usuarios.LeerUsuarioId(UsuarioId);
+    if (!result) return res.render('error');
+
+    req.logged = result[0];
+    return next();
+});
 
 app.use('/', require('./routes/public'));
 
 app.use(async function (req, res, next) {
-	// logged user lookup
-	return next();
+    if (!req.logged)
+        return res.redirect('/login');
+    return next();
 });
 
 app.use('/admin', require('./routes/admin'));

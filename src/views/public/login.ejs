@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<title>CROCHI - Login</title>
+	<%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+	<%- include('../partials/header', { navbar: 'public' , item: 'boletas' }) %>
+
+	<main class="main container">
+		<section id="login" class="login section">
+			<div class="container" data-aos="fade-up" data-aos-delay="100">
+				<div class="row justify-content-center">
+					<div class="col-lg-8 col-md-10">
+						<div class="auth-container" data-aos="fade-in" data-aos-delay="200">
+							<div class="auth-form login-form active">
+								<div class="form-header">
+									<h3>¡Qué bueno verte!</h3>
+									<p>Ingresa a tu cuenta para continuar</p>
+								</div>
+								<form action="/login" method="post" class="auth-form-content">
+									<div class="input-group mb-3">
+										<span class="input-icon">
+											<i class="bi bi-envelope"></i>
+										</span>
+										<input type="email" id="correo" name="correo" class="form-control" placeholder="Correo electrónico" autocomplete="email" required>
+									</div>
+									<div class="input-group mb-3">
+										<span class="input-icon">
+											<i class="bi bi-lock"></i>
+										</span>
+										<input type="password" id="clave" name="clave" class="form-control" placeholder="Contraseña" autocomplete="current-password" required>
+										<span class="password-toggle"  onclick="document.getElementById('clave').type = document.getElementById('clave').type == 'password' ? 'text' : 'password'; document.getElementById('clave-icon').className = document.getElementById('clave').type == 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';">
+											<i class="bi bi-eye" id="clave-icon"></i>
+										</span>
+									</div>
+									<div class="form-options mb-4">
+										<div class="remember-me">
+											<input type="checkbox" id="recuerdame" name="recuerdame">
+											<label for="recuerdame">Recuérdame</label>
+										</div>
+										<a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+									</div>
+									<button type="submit" class="auth-btn primary-btn mb-3">
+										Iniciar Sesión
+										<i class="bi bi-arrow-right"></i>
+									</button>
+									<div class="switch-form">
+										<span>¿No tienes cuenta?</span>
+										<button type="button" class="switch-btn">Regístrate</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</section>
+	</main>
+
+	<%- include('../partials/script') %>
+</body>
+
+</html>

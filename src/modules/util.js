@@ -1,6 +1,8 @@
 function Util() { }
 Util.prototype = {}
 
+
+
 Util.LimpiarTexto = function (string, maxLength = Number.MAX_SAFE_INTEGER) {
 	if (typeof string !== 'string') return '';
 
@@ -77,5 +79,42 @@ Util.LimpiarInteger = function (value) {
 
 	return integer;
 };
+
+
+
+const crypto = require("crypto");
+Util.SHA256 = function (message) {
+	const hash = crypto.createHash('sha256');
+	if (typeof message !== 'string') message = JSON.stringify(message);
+	hash.update(message);
+	return hash.digest('hex');
+}
+
+
+
+Util.Encriptar = function (plainText, key) {
+	var iv = crypto.randomBytes(12); // 12 bytes recomendado para GCM
+
+	var key = crypto.createHash("sha256").update(key).digest();
+	var cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+	var encrypted = Buffer.concat([cipher.update(plainText, "utf8"), cipher.final()]);
+	var authTag = cipher.getAuthTag();
+
+	return [iv.toString("base64"), authTag.toString("base64"), encrypted.toString("base64")].join(":");
+}
+Util.Desencriptar = function (encryptedText, key) {
+	var [ivBase64, authTagBase64, dataBase64] = encryptedText.split(":");
+
+	var key = crypto.createHash("sha256").update(key).digest();
+	var iv = Buffer.from(ivBase64, "base64");
+	var authTag = Buffer.from(authTagBase64, "base64");
+	var encrypted = Buffer.from(dataBase64, "base64");
+
+	var decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+	decipher.setAuthTag(authTag);
+
+	var decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+	return decrypted.toString("utf8");
+}
 
 module.exports = Util;

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<title>CROCHI - Inicializar</title>
+	<%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+	<%- include('../partials/header', { navbar: 'public' , item: 'boletas' }) %>
+
+	<main class="main container">
+		<section id="login" class="login section">
+			<div class="container" data-aos="fade-up" data-aos-delay="100">
+				<div class="row justify-content-center">
+					<div class="col-lg-8 col-md-10">
+						<div class="auth-container" data-aos="fade-in" data-aos-delay="200">
+							<div class="auth-form login-form active">
+								<div class="form-header">
+									<h3>¡Te damos la bienvenida!</h3>
+									<p>Crea el primer usuario para comenzar</p>
+								</div>
+								<form action="/inicializar" method="post" class="auth-form-content">
+									<div class="input-group mb-3">
+										<span class="input-icon">
+											<i class="bi bi-person"></i>
+										</span>
+										<input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre completo" required>
+									</div>
+									<div class="input-group mb-3">
+										<span class="input-icon">
+											<i class="bi bi-envelope"></i>
+										</span>
+										<input type="email" id="correo" name="correo" class="form-control" placeholder="Correo electrónico" required>
+									</div>
+									<div class="input-group mb-3">
+										<span class="input-icon">
+											<i class="bi bi-lock"></i>
+										</span>
+										<input type="password" id="clave" name="clave" class="form-control" placeholder="Contraseña" required>
+										<span class="password-toggle"  onclick="document.getElementById('clave').type = document.getElementById('clave').type == 'password' ? 'text' : 'password'; document.getElementById('clave-icon').className = document.getElementById('clave').type == 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';">
+											<i class="bi bi-eye" id="clave-icon"></i>
+										</span>
+									</div>
+									<div class="form-options mb-4">
+										<div class="remember-me">
+											<input type="checkbox" id="recuerdame" name="recuerdame">
+											<label for="recuerdame">Recuérdame</label>
+										</div>
+									</div>
+									<button type="submit" class="auth-btn primary-btn mb-3">
+										Comenzar
+										<i class="bi bi-arrow-right"></i>
+									</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</section>
+	</main>
+
+	<%- include('../partials/script') %>
+</body>
+
+</html>

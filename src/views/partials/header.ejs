@@ -4,12 +4,13 @@
 		<div class="container-fluid container-xl">
 			<div class="d-flex align-items-center justify-content-between">
 				<a href="/" class="logo d-flex align-items-center">
-            		<img src="/img/icon.png">
+            		<img src="/img/logo.svg">
 					<h1 class="sitename">CROCHI</h1>
 				</a>
 				<div class="header-actions d-flex align-items-center">
 					<div class="dropdown account-dropdown">
-						<button class="action-icon" data-bs-toggle="dropdown" aria-label="Account">
+						<% if (!logged) { %>
+						<button class="action-icon" data-bs-toggle="dropdown">
 							<i class="bi bi-person"></i>
 							<span class="action-label d-none d-md-inline">Ingresar</span>
 						</button>
@@ -19,9 +20,24 @@
 								<p>Inicia sesión para continuar</p>
 							</div>
 							<div class="account-panel-auth">
-								<a href="#" class="btn btn-signin">Ingresar</a>
+								<a href="/login" class="btn btn-signin">Ingresar</a>
 							</div>
 						</div>
+						<% } else { %>
+						<button class="action-icon" data-bs-toggle="dropdown">
+							<i class="bi bi-person"></i>
+							<span class="action-label d-none d-md-inline">Cuenta</span>
+						</button>
+						<div class="dropdown-menu account-panel">
+							<div class="account-panel-header">
+								<h6>¡Qué bueno verte!</h6>
+								<p>Hola, <%- logged.Nombre %></p>
+							</div>
+							<div class="account-panel-auth">
+								<a href="/logout" class="btn btn-signin">Salir</a>
+							</div>
+						</div>
+						<% } %>
 					</div>
 					<i class="mobile-nav-toggle d-xl-none bi bi-list me-0"></i>
 				</div>

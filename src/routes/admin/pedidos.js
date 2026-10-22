@@ -20,7 +20,7 @@ router.get('/', async function (req, res) {
     if (result.error) return res.render('error');
     var estados = result;
 
-    return res.render('admin/pedidos', { pedidos, clientes, estados });
+    return res.render('admin/pedidos', { logged: req.logged, pedidos, clientes, estados });
 });
 
 
@@ -35,7 +35,7 @@ router.get('/registrar', async function (req, res) {
     if (result.error) return res.render('error');
     var productos = result;
 
-    return res.render('admin/pedido-registrar', { clientes, productos });
+    return res.render('admin/pedido-registrar', { logged: req.logged, clientes, productos });
 });
 router.post('/registrar', async function (req, res) {
     var cliente = Util.LimpiarInteger(req.body.cliente);
@@ -107,7 +107,7 @@ router.get('/:codigo/editar', async function (req, res) {
     if (result.error) return res.render('error');
     var clientes = result;
 
-    return res.render('admin/pedido-editar', { pedido, cliente, detalles, productos, estados, clientes });
+    return res.render('admin/pedido-editar', { logged: req.logged, pedido, cliente, detalles, productos, estados, clientes });
 });
 router.post('/editar', async function (req, res) {
     var pedido = Util.LimpiarInteger(req.body.pedido);
@@ -198,7 +198,7 @@ router.get('/:codigo', async function (req, res) {
     if (result.error) return res.render('error');
     var boletas = result;
 
-    return res.render('admin/pedido', { pedido, cliente, detalles, productos, estados, boletas });
+    return res.render('admin/pedido', { logged: req.logged, pedido, cliente, detalles, productos, estados, boletas });
 });
 
 
