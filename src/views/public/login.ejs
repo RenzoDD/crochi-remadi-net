@@ -41,13 +41,14 @@
 											<input type="checkbox" id="recuerdame" name="recuerdame">
 											<label for="recuerdame">Recuérdame</label>
 										</div>
-										<a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+										<a href="#" class="forgot-password" hidden>¿Olvidaste tu contraseña?</a>
 									</div>
+									<input type="hidden" name="url" value="<%- url %>">
 									<button type="submit" class="auth-btn primary-btn mb-3">
 										Iniciar Sesión
 										<i class="bi bi-arrow-right"></i>
 									</button>
-									<div class="switch-form">
+									<div class="switch-form" hidden>
 										<span>¿No tienes cuenta?</span>
 										<button type="button" class="switch-btn">Regístrate</button>
 									</div>

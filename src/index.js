@@ -25,7 +25,7 @@ app.use(session({
 
 app.use(async function (req, res, next) {
     var UsuarioId = req.session.usuario;
-    if (process.env.NODE_ENV === 'development') UsuarioId = 1;
+    //if (process.env.NODE_ENV === 'development') UsuarioId = 1;
 
     var result = await Storage.Usuarios.LeerUsuarioId(UsuarioId);
     if (!result) return res.render('error');
@@ -37,8 +37,10 @@ app.use(async function (req, res, next) {
 app.use('/', require('./routes/public'));
 
 app.use(async function (req, res, next) {
-    if (!req.logged)
-        return res.redirect('/login');
+    if (!req.logged) {
+		var url = Buffer.from(req.url).toString('base64');
+        return res.redirect('/login?url=' + url);
+	}
     return next();
 });
 
