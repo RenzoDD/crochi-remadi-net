@@ -42,7 +42,7 @@
                         <td><%- new Date(boleta.Emision).toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
                         <td>S/ <%- boleta.Monto.toFixed(2) %></td>
                         <th>
-                            <a href="/admin/boletas/<%- boleta.Numero %>" class="btn btn-sm" target="_blank">
+                            <a href="/admin/boletas/<%- boleta.Numero %>" class="btn btn-sm">
                                 <i class="bi bi-receipt-cutoff"></i>
                             </a>
                             <a href="/admin/boletas/<%- boleta.Numero %>/xml" class="btn btn-sm">
