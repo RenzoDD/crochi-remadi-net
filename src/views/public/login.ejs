@@ -63,6 +63,11 @@
 		</section>
 	</main>
 
+	<script>
+		document.addEventListener('DOMContentLoaded', function () { const cookie = document.cookie.split("; ").find(row => row.startsWith("correo=")); document.getElementById("correo").value = cookie ? decodeURIComponent(cookie.substring("correo=".length)) : ""; });
+		document.addEventListener('pageshow', function () { const cookie = document.cookie.split("; ").find(row => row.startsWith("correo=")); document.getElementById("correo").value = cookie ? decodeURIComponent(cookie.substring("correo=".length)) : ""; });
+	</script>
+
 	<%- include('../partials/script') %>
 </body>
 
