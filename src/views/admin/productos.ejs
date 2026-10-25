@@ -33,7 +33,7 @@
                 <tbody>
                     <% var n = 1 %>
                     <% for (var producto of productos) { %>
-                    <tr>
+                    <tr onclick="window.location='/admin/productos/<%- producto.ProductoId %>'" style="cursor: pointer;">
                         <th scope="row"><%- n++ %></th>
                         <td><%- producto.Nombre %></td>
                         <td>S/ <%- producto.Precio.toFixed(2) %></td>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Crochi Perú - Admin</title>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="index-page">
+    <%- include('../partials/header', { navbar: 'admin' , item: 'productos' }) %>
+
+    <main class="main container">
+        <nav class="my-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+                <li class="breadcrumb-item"><a href="/admin/productos">Productos</a></li>
+                <li class="breadcrumb-item active"><%- producto.Nombre %></li>
+            </ol>
+        </nav>
+		<div class="my-3 text-end">
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#actualizar">
+                <i class="bi bi-pencil"></i>
+            </button>
+		</div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label for="nombre" class="fw-bold">Nombre</label>
+                <input type="text" value="<%- producto.Nombre %>" class="form-control form-control-lg" readonly>
+            </div>
+            <div class="col-md-6 mb-4">
+                <label for="precio" class="fw-bold">Precio</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text">S/</span>
+                    <input type="number" value="<%- producto.Precio.toFixed(2) %>" class="form-control" readonly>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="actualizar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <form action="/admin/productos/actualizar" method="post" class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">
+                        <i class="bi bi-pencil"></i> Actualizar Usuario
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre" class="fw-bold">Nombre</label>
+                        <input type="text" id="nombre" name="nombre" value="<%- producto.Nombre %>" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="precio" class="fw-bold">Precio</label>
+                        <div class="input-group">
+                            <span class="input-group-text">S/</span>
+                            <input type="number" id="precio" name="precio" value="<%- producto.Precio.toFixed(2) %>" class="form-control" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="producto" name="producto" value="<%- producto.ProductoId %>">
+                    <button class="btn btn-primary">Actualizar</button>
+                </div>
+                <script>
+                    function ActualizarUsuario(id, nombre, precio) {
+                        document.getElementById('producto').value = id;
+                        document.getElementById('nombre').value = nombre;
+                        document.getElementById('precio').value = precio;
+                    }
+                </script>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/script') %>
+</body>
+
+</html>

@@ -25,7 +25,7 @@ app.use(session({
 
 app.use(async function (req, res, next) {
     var UsuarioId = req.session.usuario;
-    //if (process.env.NODE_ENV === 'development') UsuarioId = 1;
+    if (process.env.NODE_ENV === 'development') UsuarioId = 1;
 
     var result = await Storage.Usuarios.LeerUsuarioId(UsuarioId);
     if (!result) return res.render('error');
