@@ -42,7 +42,7 @@
             <form action="/admin/productos/actualizar" method="post" class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5">
-                        <i class="bi bi-pencil"></i> Actualizar Usuario
+                        <i class="bi bi-pencil"></i> Actualizar Producto
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -63,13 +63,6 @@
                     <input type="hidden" id="producto" name="producto" value="<%- producto.ProductoId %>">
                     <button class="btn btn-primary">Actualizar</button>
                 </div>
-                <script>
-                    function ActualizarUsuario(id, nombre, precio) {
-                        document.getElementById('producto').value = id;
-                        document.getElementById('nombre').value = nombre;
-                        document.getElementById('precio').value = precio;
-                    }
-                </script>
             </form>
         </div>
     </div>

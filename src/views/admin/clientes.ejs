@@ -35,7 +35,7 @@
                 <tbody>
                     <% var n = 1 %>
                     <% for (var cliente of clientes) { %>
-                    <tr>
+                    <tr onclick="window.location='/admin/clientes/<%- cliente.ClienteId %>'" style="cursor: pointer;">
                         <th scope="row"><%- n++ %></th>
                         <td><%- cliente.Nombre %></td>
                         <td><%- cliente.DNI %></td>
