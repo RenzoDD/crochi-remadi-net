@@ -14,18 +14,31 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
                 <li class="breadcrumb-item active">Movimientos</li>
-                <li class="breadcrumb-item active"><%- saldo.toFixed(2) %></li>
+                <li class="breadcrumb-item active">PEN <%- saldo.toFixed(2) %></li>
             </ol>
         </nav>
-		<div class="my-3 text-end">
-            <a class="btn btn-dark ms-3" href="https://bcpzonasegura.viabcp.com/#/portal/mis-productos" target="_blank">
-                <i class="bi bi-bank"></i> BCP
-            </a>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrar">
-                <i class="bi bi-cash-coin"></i>
-                Registrar Movimiento
-            </button>
-		</div>
+        <div class="row">
+            <div class="col-md-6 my-3">
+                <div class="input-group">
+                    <span class="input-group-text">Hasta</span>
+                    <input type="month" class="form-control" value="<%- mes %>" onchange="window.location.href = '/admin/movimientos/' + this.value">
+                    <% if (mes) { %>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#informe">
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                    </button>
+                    <% } %>
+                </div>
+            </div>
+            <div class="col-md-6 my-3 text-end">
+                <a class="btn btn-dark ms-3" href="https://bcpzonasegura.viabcp.com/#/portal/mis-productos" target="_blank">
+                    <i class="bi bi-bank"></i> BCP
+                </a>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrar">
+                    <i class="bi bi-cash-coin"></i>
+                    Registrar Movimiento
+                </button>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
@@ -142,6 +155,47 @@
             </form>
         </div>
     </div>
+    <% if (mes) { %>
+    <div class="modal fade" id="informe" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="informeLabel">Informe de Movimientos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label class="fw-bold">Mes</label>
+                            <input type="month" class="form-control" value="<%- mes %>" readonly>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="fw-bold">Ventas</label>
+                            <div class="input-group">
+                                <span class="input-group-text">S/</span>
+                                <input type="text" class="form-control text-end" value="<%- movimientos.filter(m => m.TipoId === 3).reduce((sum, m) => sum + m.Ingreso, 0).toFixed(2) %>" readonly>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="fw-bold">Gastos</label>
+                            <div class="input-group">
+                                <span class="input-group-text">S/</span>
+                                <input type="text" class="form-control text-end" value="<%- movimientos.filter(m => m.TipoId === 4 || m.TipoId === 5).reduce((sum, m) => sum + m.Egreso, 0).toFixed(2) %>" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="fw-bold">Retiro de Utilidades</label>
+                            <div class="input-group">
+                                <span class="input-group-text">S/</span>
+                                <input type="text" class="form-control text-end" value="<%- movimientos.filter(m => m.TipoId === 2).reduce((sum, m) => sum + m.Egreso, 0).toFixed(2) %>" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
 
 	<%- include('../partials/script') %>
 </body>

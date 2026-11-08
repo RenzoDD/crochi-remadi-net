@@ -9,3 +9,4 @@ INSERT INTO MovimientosTipos (Justificable, Nombre) VALUES (0, 'Retiro de Utilid
 INSERT INTO MovimientosTipos (Justificable, Nombre) VALUES (1, 'Venta de Productos');
 INSERT INTO MovimientosTipos (Justificable, Nombre) VALUES (0, 'Compra de Insumos');
 INSERT INTO MovimientosTipos (Justificable, Nombre) VALUES (0, 'Pago de Servicios');
+INSERT INTO MovimientosTipos (Justificable, Nombre) VALUES (0, 'Pago de Impuestos');

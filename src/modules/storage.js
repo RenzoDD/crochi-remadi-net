@@ -311,8 +311,11 @@ Storage.Movimientos.Crear = async function (tipo, codigo, fecha, descripcion, in
 Storage.Movimientos.Leer = async function () {
 	return await Query('SELECT M.*, T.Nombre AS TipoNombre FROM Movimientos M LEFT JOIN MovimientosTipos T ON M.TipoId = T.TipoId WHERE M.IsDeleted = 0 ORDER BY M.Fecha DESC, M.CreatedAt DESC');
 }
-Storage.Movimientos.LeerSaldos = async function () {
-	var result = await Query('SELECT SUM(Ingreso) AS Ingreso, SUM(Egreso) AS Egreso FROM Movimientos WHERE IsDeleted = 0');
+Storage.Movimientos.LeerMes = async function (mes) {
+	return await Query('SELECT M.*, T.Nombre AS TipoNombre FROM Movimientos M LEFT JOIN MovimientosTipos T ON M.TipoId = T.TipoId WHERE M.IsDeleted = 0 AND substr(M.Fecha, 1, 7) = ? ORDER BY M.Fecha DESC, M.CreatedAt DESC', [mes]);
+}
+Storage.Movimientos.LeerSaldosHastaMes = async function (mes) {
+	var result = await Query('SELECT SUM(Ingreso) AS Ingreso, SUM(Egreso) AS Egreso FROM Movimientos WHERE IsDeleted = 0 AND substr(Fecha, 1, 7) <= ?', [mes]);
 	if (result.error) return result;
 	return result;
 }

@@ -4,12 +4,20 @@ const router = express.Router();
 const Storage = require('../../modules/storage');
 const Util = require('../../modules/util');
 
-router.get('/', async function (req, res) {
-    var result = await Storage.Movimientos.Leer();
-    if (result.error) return res.render('error');
-    var movimientos = result;
+router.get('{/:mes}', async function (req, res) {
+    var mes = new Date(req.params.mes || Date.now()).toISOString().substring(0, 7);
 
-    var result = await Storage.Movimientos.LeerSaldos()
+    if (req.params.mes) {
+        var result = await Storage.Movimientos.LeerMes(mes);
+        if (result.error) return res.render('error');
+        var movimientos = result;       
+    } else {
+        var result = await Storage.Movimientos.Leer();
+        if (result.error) return res.render('error');
+        var movimientos = result;
+    }
+
+    var result = await Storage.Movimientos.LeerSaldosHastaMes(mes)
     if (result.error) return res.render('error');
     if (result.length == 0) return res.render('error');
     var saldo = result[0].Ingreso - result[0].Egreso;
@@ -18,7 +26,7 @@ router.get('/', async function (req, res) {
     if (result.error) return res.render('error');
     var tipos = result;
 
-    return res.render('admin/movimientos', { logged: req.logged, movimientos, saldo, tipos });
+    return res.render('admin/movimientos', { logged: req.logged, movimientos, saldo, mes: req.params.mes, tipos });
 });
 
 
